@@ -3,27 +3,35 @@
 import React from 'react';
 //import './StarField.css';
 
-const StarField = () => {
-  const stars = [];
+const StarField = ({ stars }) => {
 
-  for (let i = 0; i < 50; i++) {
-    stars.push(
-      <div
-        key={i}
-        className="star"
-        style={{
-          position: 'absolute',
-          width: '2px',
-          height: '2px',
-          backgroundColor: 'white',
-          top: `${Math.random() * 100}vh`,
-          left: `${Math.random() * 100}vw`,
-        }}
-      />
+  const generateStars = () => {
+    const stars = [];
+    for (let i = 0; i < 50; i++) {
+      stars.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+      });
+    }
+    return stars;
+  };
+
+  const [stars, setStars] = useState(generateStars());
+
+  const updateStars = () => {
+    setStars((prev) =>
+      prev.map((star) => ({
+        x: star.x,
+        y: star.y + 1 > window.innerHeight ? 0 : star.y + 1,
+      }))
     );
-  }
+  };
 
-  return <>{stars}</>;
+  return(
+    {stars.map((star, index) => (
+      <div key={index} className="star" style={{ left: star.x, top: star.y }}></div>
+    ))}
+  );
 };
 
 export default StarField;
